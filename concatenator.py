@@ -20,17 +20,17 @@ for arquivo in arquivos_extraidos:
     print(arquivo)
     df = df[df['ACAO'] == 'SUBIDA_DOCUMENTO']
     df = df['DATA_ACAO'].value_counts().reset_index()
-    df = df.resample('W').sum()
-    df.reset_index(inplace=True)
-    df.set_index('DATA_ACAO', inplace=True)
     df.columns = ['DATA_ACAO', 'TOTAL_POSTAGEM']
     data_filtred = pd.concat([data_filtred, df], axis=0, ignore_index=True)
 
 #%%
 data_filtred = data_filtred.drop_duplicates()
+data_filtred['DATA_ACAO'] = pd.to_datetime(data_filtred['DATA_ACAO'], errors='coerce')
+
 
 # %%
-data_filtred.to_excel('data_filtred.xlsx')
+data_filtred.to_excel('data_bronze/data_filtred.xlsx')
 
 #%%
-data_filtred.to_parquet('data_filtred.parquet')
+data_filtred.to_parquet('data_bronze/data_filtred.parquet')
+# %%
